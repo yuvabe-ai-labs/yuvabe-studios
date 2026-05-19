@@ -8,11 +8,19 @@ import {
   saveAboutContentAction,
   saveAiNativeEngineeringContentAction,
   saveAiWorkflowsContentAction,
+  saveCareersContentAction,
   saveCaseStudyContentAction,
   saveDigitalMarketingContentAction,
   saveHomepageContentAction,
   saveUiuxDesignContentAction,
 } from "@/app/studio-admin/actions";
+import type {
+  CareersBenefitItem,
+  CareersPageContent,
+  CareersPrincipleItem,
+  CareersProcessStepItem,
+  CareersTestimonialItem,
+} from "@/lib/careers-content";
 import type { StudioAboutPageContent } from "@/components/studio/studio-about-content";
 import type {
   StudioAiWorkflowsContent,
@@ -58,8 +66,9 @@ type StudioAdminEditorProps = {
   digitalMarketingContent: StudioDigitalMarketingContent;
   uiuxDesignContent: StudioUiuxDesignContent;
   caseStudies: StudioEditableCaseStudy[];
+  careersContent: CareersPageContent;
   initialCaseStudyId?: string;
-  initialTab: "homepage" | "about" | "ai-workflows" | "services" | "case-studies";
+  initialTab: "homepage" | "about" | "ai-workflows" | "services" | "case-studies" | "careers";
   savedState?: string;
 };
 
@@ -1130,6 +1139,7 @@ export function StudioAdminEditor({
   digitalMarketingContent,
   uiuxDesignContent,
   caseStudies,
+  careersContent,
   initialCaseStudyId,
   initialTab,
   savedState,
@@ -1142,6 +1152,7 @@ export function StudioAdminEditor({
   const [aiNativeEngineeringDraft, setAiNativeEngineeringDraft] = useState(aiNativeEngineeringContent);
   const [digitalMarketingDraft, setDigitalMarketingDraft] = useState(digitalMarketingContent);
   const [uiuxDesignDraft, setUiuxDesignDraft] = useState(uiuxDesignContent);
+  const [careersDraft, setCareersDraft] = useState(careersContent);
   const [caseStudyDrafts, setCaseStudyDrafts] = useState(caseStudies);
   const [selectedCaseStudyId, setSelectedCaseStudyId] = useState(
     initialCaseStudyId ?? caseStudies[0]?.id ?? "",
@@ -1205,14 +1216,16 @@ export function StudioAdminEditor({
                     ? "UI/UX Design content saved. Refresh the UI/UX Design page to review it."
                     : savedState === "ai-native-engineering"
                       ? "AI Native Engineering content saved. Refresh the page to review it."
-                      : "Case study saved. Refresh the homepage or the case-study route to review it."}
+                      : savedState === "careers"
+                        ? "Careers content saved. Refresh the careers page to review it."
+                        : "Case study saved. Refresh the homepage or the case-study route to review it."}
         </div>
       ) : null}
 
       <Tabs
         value={activeTab}
         onValueChange={(value) =>
-          setActiveTab(value as "homepage" | "about" | "ai-workflows" | "services" | "case-studies")
+          setActiveTab(value as "homepage" | "about" | "ai-workflows" | "services" | "case-studies" | "careers")
         }
         className="space-y-6"
       >
@@ -1222,6 +1235,7 @@ export function StudioAdminEditor({
           <TabsTrigger value="ai-workflows">AI Workflows</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="case-studies">Case studies</TabsTrigger>
+          <TabsTrigger value="careers">Careers</TabsTrigger>
         </TabsList>
 
         <TabsContent value="homepage">
@@ -3354,6 +3368,251 @@ export function StudioAdminEditor({
               />
             </form>
           ) : null}
+        </TabsContent>
+
+        {/* ── Careers ─────────────────────────────────────────────────────── */}
+        <TabsContent value="careers">
+          <form action={saveCareersContentAction} className="space-y-6">
+            <input type="hidden" name="payload" value={JSON.stringify(careersDraft)} readOnly />
+
+            {/* Hero */}
+            <Card>
+              <CardHeader><CardTitle>Hero</CardTitle></CardHeader>
+              <CardContent className="space-y-4 pb-6">
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <Field label="Heading line 1">
+                    <input
+                      className={formControlClassName}
+                      value={careersDraft.hero.headingLine1}
+                      onChange={(e) => setCareersDraft({ ...careersDraft, hero: { ...careersDraft.hero, headingLine1: e.target.value } })}
+                    />
+                  </Field>
+                  <Field label="Heading highlight">
+                    <input
+                      className={formControlClassName}
+                      value={careersDraft.hero.headingHighlight}
+                      onChange={(e) => setCareersDraft({ ...careersDraft, hero: { ...careersDraft.hero, headingHighlight: e.target.value } })}
+                    />
+                  </Field>
+                </div>
+                <Field label="Subheading">
+                  <textarea
+                    aria-label="Subheading"
+                    className={textareaClassName}
+                    value={careersDraft.hero.subheading}
+                    onChange={(e) => setCareersDraft({ ...careersDraft, hero: { ...careersDraft.hero, subheading: e.target.value } })}
+                  />
+                </Field>
+              </CardContent>
+            </Card>
+
+            {/* Principles */}
+            <Card>
+              <CardHeader><CardTitle>Principles (4 fixed)</CardTitle></CardHeader>
+              <CardContent className="space-y-5 pb-6">
+                {careersDraft.principles.map((p: CareersPrincipleItem, i: number) => (
+                  <Card key={i}>
+                    <CardHeader><CardTitle className="text-body-lg">Principle {i + 1}</CardTitle></CardHeader>
+                    <CardContent className="space-y-4 pb-6">
+                      <Field label="Eyebrow">
+                        <input
+                          className={formControlClassName}
+                          value={p.eyebrow}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, principles: replaceAt(careersDraft.principles, i, { ...p, eyebrow: e.target.value }) })}
+                        />
+                      </Field>
+                      <Field label="Title">
+                        <input
+                          className={formControlClassName}
+                          value={p.title}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, principles: replaceAt(careersDraft.principles, i, { ...p, title: e.target.value }) })}
+                        />
+                      </Field>
+                      <Field label="Body">
+                        <textarea
+                          className={textareaClassName}
+                          value={p.body}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, principles: replaceAt(careersDraft.principles, i, { ...p, body: e.target.value }) })}
+                        />
+                      </Field>
+                    </CardContent>
+                  </Card>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Benefits */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between gap-3">
+                <CardTitle>Benefits</CardTitle>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setCareersDraft({ ...careersDraft, benefits: [...careersDraft.benefits, { title: "", body: "" }] })}
+                >
+                  Add benefit
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-4 pb-6">
+                {careersDraft.benefits.map((b: CareersBenefitItem, i: number) => (
+                  <Card key={i}>
+                    <CardHeader className="flex flex-row items-center justify-between gap-3">
+                      <CardTitle className="text-body-lg">Benefit {i + 1}</CardTitle>
+                      <Button type="button" variant="secondary" size="sm" onClick={() => setCareersDraft({ ...careersDraft, benefits: removeAt(careersDraft.benefits, i) })}>Remove</Button>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pb-6">
+                      <Field label="Title">
+                        <input
+                          className={formControlClassName}
+                          value={b.title}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, benefits: replaceAt(careersDraft.benefits, i, { ...b, title: e.target.value }) })}
+                        />
+                      </Field>
+                      <Field label="Body">
+                        <textarea
+                          className={textareaClassName}
+                          value={b.body}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, benefits: replaceAt(careersDraft.benefits, i, { ...b, body: e.target.value }) })}
+                        />
+                      </Field>
+                    </CardContent>
+                  </Card>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Testimonials */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between gap-3">
+                <CardTitle>Testimonials</CardTitle>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setCareersDraft({ ...careersDraft, testimonials: [...careersDraft.testimonials, { quote: "", name: "", role: "" }] })}
+                >
+                  Add testimonial
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-4 pb-6">
+                {careersDraft.testimonials.map((t: CareersTestimonialItem, i: number) => (
+                  <Card key={i}>
+                    <CardHeader className="flex flex-row items-center justify-between gap-3">
+                      <CardTitle className="text-body-lg">Testimonial {i + 1}</CardTitle>
+                      <Button type="button" variant="secondary" size="sm" onClick={() => setCareersDraft({ ...careersDraft, testimonials: removeAt(careersDraft.testimonials, i) })}>Remove</Button>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pb-6">
+                      <Field label="Quote">
+                        <textarea
+                          className={textareaClassName}
+                          value={t.quote}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, testimonials: replaceAt(careersDraft.testimonials, i, { ...t, quote: e.target.value }) })}
+                        />
+                      </Field>
+                      <div className="grid gap-4 lg:grid-cols-2">
+                        <Field label="Name">
+                          <input
+                            aria-label="Name"
+                            className={formControlClassName}
+                            value={t.name}
+                            onChange={(e) => setCareersDraft({ ...careersDraft, testimonials: replaceAt(careersDraft.testimonials, i, { ...t, name: e.target.value }) })}
+                          />
+                        </Field>
+                        <Field label="Role">
+                          <input
+                            aria-label="Role"
+                            className={formControlClassName}
+                            value={t.role}
+                            onChange={(e) => setCareersDraft({ ...careersDraft, testimonials: replaceAt(careersDraft.testimonials, i, { ...t, role: e.target.value }) })}
+                          />
+                        </Field>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Process steps */}
+            <Card>
+              <CardHeader><CardTitle>Hiring process (5 fixed steps)</CardTitle></CardHeader>
+              <CardContent className="space-y-4 pb-6">
+                {careersDraft.process.map((s: CareersProcessStepItem, i: number) => (
+                  <Card key={i}>
+                    <CardHeader><CardTitle className="text-body-lg">Step {i + 1}</CardTitle></CardHeader>
+                    <CardContent className="space-y-4 pb-6">
+                      <Field label="Title">
+                        <input
+                          className={formControlClassName}
+                          value={s.title}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, process: replaceAt(careersDraft.process, i, { ...s, title: e.target.value }) })}
+                        />
+                      </Field>
+                      <Field label="Body">
+                        <textarea
+                          className={textareaClassName}
+                          value={s.body}
+                          onChange={(e) => setCareersDraft({ ...careersDraft, process: replaceAt(careersDraft.process, i, { ...s, body: e.target.value }) })}
+                        />
+                      </Field>
+                    </CardContent>
+                  </Card>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* CTA */}
+            <Card>
+              <CardHeader><CardTitle>CTA section</CardTitle></CardHeader>
+              <CardContent className="space-y-4 pb-6">
+                <Field label="Kicker">
+                  <input
+                    aria-label="Kicker"
+                    className={formControlClassName}
+                    value={careersDraft.cta.kicker}
+                    onChange={(e) => setCareersDraft({ ...careersDraft, cta: { ...careersDraft.cta, kicker: e.target.value } })}
+                  />
+                </Field>
+                <div className="grid gap-4 lg:grid-cols-3">
+                  <Field label="Heading prefix">
+                    <input
+                      aria-label="Heading prefix"
+                      className={formControlClassName}
+                      value={careersDraft.cta.headingPrefix}
+                      onChange={(e) => setCareersDraft({ ...careersDraft, cta: { ...careersDraft.cta, headingPrefix: e.target.value } })}
+                    />
+                  </Field>
+                  <Field label="Heading highlight (purple)">
+                    <input
+                      aria-label="Heading highlight"
+                      className={formControlClassName}
+                      value={careersDraft.cta.headingHighlight}
+                      onChange={(e) => setCareersDraft({ ...careersDraft, cta: { ...careersDraft.cta, headingHighlight: e.target.value } })}
+                    />
+                  </Field>
+                  <Field label="Heading suffix">
+                    <input
+                      aria-label="Heading suffix"
+                      className={formControlClassName}
+                      value={careersDraft.cta.headingSuffix}
+                      onChange={(e) => setCareersDraft({ ...careersDraft, cta: { ...careersDraft.cta, headingSuffix: e.target.value } })}
+                    />
+                  </Field>
+                </div>
+                <Field label="Body">
+                  <textarea
+                    aria-label="Body"
+                    className={textareaClassName}
+                    value={careersDraft.cta.body}
+                    onChange={(e) => setCareersDraft({ ...careersDraft, cta: { ...careersDraft.cta, body: e.target.value } })}
+                  />
+                </Field>
+              </CardContent>
+            </Card>
+
+            <StickySaveBar label="Save careers content" previewHref="/careers" />
+          </form>
         </TabsContent>
       </Tabs>
     </div>

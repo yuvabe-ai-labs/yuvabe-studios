@@ -19,6 +19,10 @@ import {
   saveStudioHomepageContent,
   saveStudioUiuxDesignContent,
 } from "@/lib/studio-content";
+import {
+  parseCareersPageContentInput,
+  saveStudioCareersPageContent,
+} from "@/lib/careers-content";
 
 function expectString(value: FormDataEntryValue | null, label: string) {
   if (typeof value !== "string") {
@@ -92,6 +96,17 @@ export async function saveUiuxDesignContentAction(formData: FormData) {
   revalidatePath("/uiux-design");
   revalidatePath("/studio-admin");
   redirect("/studio-admin?tab=services&saved=uiux-design");
+}
+
+export async function saveCareersContentAction(formData: FormData) {
+  const payload = expectString(formData.get("payload"), "Careers payload");
+  const parsedPayload = parseCareersPageContentInput(JSON.parse(payload));
+
+  await saveStudioCareersPageContent(parsedPayload);
+
+  revalidatePath("/careers");
+  revalidatePath("/studio-admin");
+  redirect("/studio-admin?tab=careers&saved=careers");
 }
 
 export async function saveCaseStudyContentAction(formData: FormData) {
