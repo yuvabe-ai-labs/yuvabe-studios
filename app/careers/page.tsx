@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 
 import { CareersLandingPage } from "@/components/careers/careers-landing-page";
-import { getJobsByLevel } from "@/services/careers.service";
+import { getAllJobs } from "@/services/careers.service";
 import { getAbsoluteUrl } from "@/lib/site";
 import { getStudioHomepageContent } from "@/lib/studio-content";
+import { getStudioCareersPageContent } from "@/lib/careers-content";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -26,10 +27,10 @@ export const metadata: Metadata = {
 };
 
 export default async function CareersPage() {
-  const [homepageContent, entryJobs, experiencedJobs] = await Promise.all([
+  const [homepageContent, allJobs, careersContent] = await Promise.all([
     getStudioHomepageContent(),
-    getJobsByLevel("entry"),
-    getJobsByLevel("experienced"),
+    getAllJobs(),
+    getStudioCareersPageContent(),
   ]);
 
   const structuredData = {
@@ -54,8 +55,8 @@ export default async function CareersPage() {
       />
       <CareersLandingPage
         navigationItems={homepageContent.navigationItems}
-        entryCount={entryJobs.length}
-        experiencedCount={experiencedJobs.length}
+        jobs={allJobs}
+        content={careersContent}
       />
     </>
   );

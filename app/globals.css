@@ -873,6 +873,55 @@ h6 {
   color: var(--color-text-primary);
 }
 
+/* ── Careers page utilities ─────────────────────────────────────────────── */
+
+/* Stripe texture for the principle card "tall" slot image placeholder */
+.careers-principle-stripe-dark {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0 14px, rgba(255, 255, 255, 0.04) 14px 15px),
+    rgba(255, 255, 255, 0.06);
+}
+
+/* Stripe texture for the principle card "soft" slot image placeholder */
+.careers-principle-stripe-soft {
+  background:
+    repeating-linear-gradient(135deg, rgba(17, 17, 17, 0.04) 0 14px, rgba(17, 17, 17, 0.02) 14px 15px),
+    var(--neutral-200);
+}
+
+/* CTA section light background shell */
+.careers-cta-surface {
+  background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--purple-500) 6%, white) 100%);
+  border: 1px solid rgba(88, 41, 199, 0.12);
+}
+
+/* CTA primary glow blob (top-left purple) */
+.careers-cta-glow-primary {
+  background: radial-gradient(circle, color-mix(in srgb, var(--purple-500) 18%, white) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+/* CTA accent glow blob (bottom-right yellow) */
+.careers-cta-glow-accent {
+  background: radial-gradient(circle, color-mix(in srgb, var(--yellow-500) 22%, white) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+/* Timeline animated progress bar gradient */
+.careers-timeline-progress {
+  background: linear-gradient(90deg, var(--purple-500), var(--yellow-500));
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* CTA heading — responsive clamp size that can't be expressed as a fixed Tailwind step */
+.careers-cta-heading {
+  font-family: var(--font-display-family);
+  font-size: clamp(28px, 6vw, 84px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
 .text-display-xl {
   font-family: var(--font-display-family);
   font-size: 64px;
