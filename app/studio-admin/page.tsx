@@ -1,5 +1,6 @@
 import { createStudioEditableCaseStudy } from "@/components/studio/studio-case-study-content";
 import { StudioAdminEditor } from "@/components/studio/studio-admin-editor";
+import { logoutAction } from "@/app/studio-admin/login/actions";
 import {
   getStudioAboutPageContent,
   getStudioAiNativeEngineeringContent,
@@ -70,17 +71,29 @@ export default async function StudioAdminPage({
       <div className="mx-auto max-w-7xl space-y-8">
         {/* The route intro keeps the internal editor focused on the current studio content sources. */}
         <section className="space-y-3">
-          <p className="text-label-sm uppercase tracking-[0.22em] text-[var(--color-text-tertiary)]">
-            Internal / Content editor
-          </p>
-          <h1 className="text-heading-xl text-foreground">
-            Minimal content CMS
-          </h1>
-          <p className="max-w-3xl text-body-lg text-muted-foreground">
-            Edit homepage, about-page, AI Workflows, and case-study content,
-            save to Supabase, then refresh the site to review the change
-            immediately.
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-3">
+              <p className="text-label-sm uppercase tracking-[0.22em] text-(--color-text-tertiary)">
+                Internal / Content editor
+              </p>
+              <h1 className="text-heading-xl text-foreground">
+                Minimal content CMS
+              </h1>
+              <p className="max-w-3xl text-body-lg text-muted-foreground">
+                Edit homepage, about-page, AI Workflows, and case-study content,
+                save to Supabase, then refresh the site to review the change
+                immediately.
+              </p>
+            </div>
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="shrink-0 rounded-xl border border-(--color-border-default) bg-white px-4 py-2 text-sm font-medium text-(--neutral-600) shadow-sm transition hover:border-(--neutral-400) hover:text-(--neutral-900)"
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
         </section>
 
         <StudioAdminEditor
