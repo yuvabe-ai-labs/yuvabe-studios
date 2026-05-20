@@ -1,6 +1,7 @@
 import type { StudioHomepageNavItem } from "@/components/studio/studio-homepage-content";
 import type { UiuxDesignPageContent } from "@/components/uiux-design/uiux-design-content";
 import {
+  ArrowRight,
   LayoutDashboard,
   LayoutTemplate,
   Palette,
@@ -8,15 +9,14 @@ import {
   Smartphone,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { ServiceCaseStudyGrid } from "@/components/shared/service-case-study-grid";
 import { PageHero } from "@/components/digital-marketing/page-hero";
-import { StudioCtaCard } from "@/components/studio/studio-cta-card";
 import { StudioHeader } from "@/components/studio/studio-header";
 import {
   StudioPageContainer,
   StudioPageRails,
 } from "@/components/studio/studio-page-shell";
-import { PremiumSurface } from "@/components/ui/premium-surface";
 
 type UiuxDesignPageProps = {
   navigationItems: StudioHomepageNavItem[];
@@ -41,18 +41,17 @@ const uiuxClientLogosBase = [
   { name: "KittyKat", src: "/assets/KK/logo.svg", imageClass: "h-14 w-auto max-w-28" },
 ];
 
-// Tile 2× so the marquee group fills any viewport without gaps.
 const uiuxClientLogos = [...uiuxClientLogosBase, ...uiuxClientLogosBase];
 
 const logoClass = "object-contain opacity-60 grayscale transition-[opacity,filter] duration-200 hover:opacity-100 hover:grayscale-0";
 
-const gridOverlay = (
-  <div aria-hidden="true" className="absolute inset-0">
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.042)_1px,transparent_1px)] bg-size-[120px_100%]" />
-    <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(148,163,184,0.021)_1px,transparent_1px)] bg-size-[100%_120px]" />
-    <StudioPageRails />
-  </div>
-);
+function Kicker({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="mb-5 inline-block font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-brand">
+      {children}
+    </span>
+  );
+}
 
 export function UiuxDesignPage({
   navigationItems,
@@ -61,11 +60,11 @@ export function UiuxDesignPage({
   return (
     <main
       data-studio-shell
-      className="relative min-h-screen overflow-x-clip overflow-y-visible bg-white text-foreground"
+      className="relative min-h-screen overflow-x-clip overflow-y-visible bg-(--neutral-50) text-foreground"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
         <StudioPageRails />
-        <div className="absolute inset-x-0 top-0 h-104 bg-[radial-gradient(circle_at_14%_0%,rgba(88,41,199,0.08),rgba(255,255,255,0)_34%),radial-gradient(circle_at_88%_0%,rgba(249,169,31,0.1),rgba(255,255,255,0)_30%)]" />
+        <div className="absolute inset-x-0 top-0 h-104 bg-[radial-gradient(circle_at_14%_0%,rgba(88,41,199,0.06),transparent_34%),radial-gradient(circle_at_88%_0%,rgba(249,169,31,0.07),transparent_30%)]" />
       </div>
 
       <StudioHeader navigationItems={navigationItems} />
@@ -75,27 +74,23 @@ export function UiuxDesignPage({
 
         {/* 02 — Best fit + client logos */}
         {content.bestFit && (
-          <section className="relative border-b border-slate-200/80 bg-white py-12 md:py-16">
-            {gridOverlay}
-            <StudioPageContainer className="relative z-10">
+          <section className="relative border-b border-(--color-border-default) bg-white py-12 md:py-16">
+            <StudioPageContainer>
               <div className="max-w-4xl space-y-3 lg:pl-4 xl:pl-6">
-                <p className="text-label-sm uppercase tracking-[0.22em] text-(--color-text-tertiary)">
-                  {content.bestFit.label}
-                </p>
+                <Kicker>{content.bestFit.label}</Kicker>
                 <p className="text-body-lg text-(--color-text-secondary)">
                   {content.bestFit.description}
                 </p>
               </div>
             </StudioPageContainer>
 
-            {/* Marquee logo strip — identical structure to the homepage StudioTrustStrip */}
-            <div className="relative z-10 mt-8">
+            <div className="mt-8">
               <StudioPageContainer className="relative md:px-0">
                 <div className="relative overflow-hidden">
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-20 w-px bg-slate-200/80" />
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-20 w-px bg-slate-200/80" />
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.84),rgba(255,255,255,0))] md:w-28" />
-                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-[linear-gradient(to_left,rgba(255,255,255,0.84),rgba(255,255,255,0))] md:w-28" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-20 w-px bg-(--color-border-default)" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-20 w-px bg-(--color-border-default)" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.9),rgba(255,255,255,0))] md:w-28" />
+                  <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-[linear-gradient(to_left,rgba(255,255,255,0.9),rgba(255,255,255,0))] md:w-28" />
 
                   <div className="marquee-viewport">
                     <div className="marquee-track py-6">
@@ -124,10 +119,10 @@ export function UiuxDesignPage({
         )}
 
         {/* 03 — Case studies */}
-        <section className="relative overflow-hidden border-b border-slate-200/80 bg-(--color-background-canvas) py-14 md:py-20">
-          {gridOverlay}
-          <StudioPageContainer className="relative z-10 space-y-10">
+        <section id="case-studies" className="relative overflow-hidden border-b border-(--color-border-default) bg-(--neutral-50) py-14 md:py-20">
+          <StudioPageContainer className="space-y-10">
             <div className="max-w-4xl space-y-4 lg:pl-4 xl:pl-6">
+              <Kicker>Case studies</Kicker>
               <h2 className="max-w-5xl text-display-muted-editorial text-(--neutral-950)">
                 {content.caseStudiesTitle}
               </h2>
@@ -143,13 +138,10 @@ export function UiuxDesignPage({
 
         {/* 04 — How we design it */}
         {content.approach && (
-          <section className="relative overflow-hidden border-b border-slate-200/80 bg-white py-14 md:py-20">
-            {gridOverlay}
-            <StudioPageContainer className="relative z-10 space-y-10">
+          <section className="relative overflow-hidden border-b border-(--color-border-default) bg-white py-14 md:py-20">
+            <StudioPageContainer className="space-y-10">
               <div className="max-w-4xl space-y-3 lg:pl-4 xl:pl-6">
-                <p className="text-label-sm uppercase tracking-[0.22em] text-(--color-text-tertiary)">
-                  {content.approach.label}
-                </p>
+                <Kicker>{content.approach.label}</Kicker>
                 <h2 className="text-display-muted-editorial text-(--neutral-950)">
                   {content.approach.headline}
                 </h2>
@@ -157,34 +149,22 @@ export function UiuxDesignPage({
 
               <div className="grid gap-6 md:grid-cols-3 lg:pl-4 xl:pl-6">
                 {content.approach.principles.map((principle, index) => (
-                  <div key={principle.title} className="group relative">
-                    {index < content.approach!.principles.length - 1 && (
-                      <div
-                        aria-hidden="true"
-                        className="absolute top-8 left-full z-10 hidden h-px w-6 bg-linear-to-r from-slate-200 to-transparent md:block"
-                      />
-                    )}
-                    <PremiumSurface
-                      tone={(["tintLavender", "tintWarm", "tintCyan"] as const)[index % 3]}
-                      elevation="sm"
-                      blur="md"
-                      radius="xl"
-                      className="h-full space-y-5 p-7"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,rgba(88,41,199,0.12),rgba(88,41,199,0.06))] text-[11px] font-semibold tracking-wider text-(--color-text-brand) ring-1 ring-[rgba(88,41,199,0.16)]">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <div className="h-px flex-1 bg-linear-to-r from-[rgba(88,41,199,0.12)] to-transparent" />
-                      </div>
-
-                      <h3 className="text-heading-md font-semibold tracking-wide text-(--neutral-950)">
-                        {principle.title}
-                      </h3>
-                      <p className="text-body-md leading-relaxed text-(--color-text-secondary)">
-                        {principle.description}
-                      </p>
-                    </PremiumSurface>
+                  <div
+                    key={principle.title}
+                    className="relative overflow-hidden rounded-2xl border border-(--color-border-default) bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-[0_20px_40px_rgba(17,17,17,0.08)]"
+                  >
+                    <div className="mb-5 flex items-center gap-3">
+                      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand/10 font-mono text-[11px] font-semibold text-brand">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div className="h-px flex-1 bg-(--neutral-200)" />
+                    </div>
+                    <h3 className="mb-3 text-heading-md font-semibold tracking-wide text-(--neutral-950)">
+                      {principle.title}
+                    </h3>
+                    <p className="text-body-md leading-relaxed text-(--color-text-secondary)">
+                      {principle.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -193,27 +173,24 @@ export function UiuxDesignPage({
         )}
 
         {/* 05 — Services list */}
-        <section className="relative overflow-hidden border-b border-slate-200/80 bg-(--color-background-canvas) py-14 md:py-20">
-          {gridOverlay}
-          <StudioPageContainer className="relative z-10 space-y-8">
-            <h2 className="max-w-4xl text-display-muted-editorial text-(--neutral-950) lg:pl-4 xl:pl-6">
-              {content.servicesTitle}
-            </h2>
+        <section className="relative overflow-hidden border-b border-(--color-border-default) bg-(--neutral-50) py-14 md:py-20">
+          <StudioPageContainer className="space-y-8">
+            <div className="lg:pl-4 xl:pl-6">
+              <Kicker>Our services</Kicker>
+              <h2 className="max-w-4xl text-display-muted-editorial text-(--neutral-950)">
+                {content.servicesTitle}
+              </h2>
+            </div>
             <div className="grid gap-4 lg:grid-cols-2 lg:pl-4 xl:pl-6">
               {content.services.map((service) => {
                 const Icon = serviceIconMap[service.iconKey];
-
                 return (
-                  <PremiumSurface
+                  <div
                     key={service.title}
-                    tone="glass"
-                    elevation="sm"
-                    blur="md"
-                    radius="xl"
-                    className="p-6"
+                    className="relative overflow-hidden rounded-2xl border border-(--color-border-default) bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-[0_20px_40px_rgba(17,17,17,0.08)]"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-full border border-white/80 bg-white/88 text-(--color-text-brand) shadow-[0_10px_28px_rgba(15,23,42,0.06)]">
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
                         <Icon className="size-5" />
                       </div>
                       <div className="space-y-2">
@@ -225,7 +202,7 @@ export function UiuxDesignPage({
                         </p>
                       </div>
                     </div>
-                  </PremiumSurface>
+                  </div>
                 );
               })}
             </div>
@@ -234,38 +211,24 @@ export function UiuxDesignPage({
 
         {/* 06 — Testimonial */}
         {content.pageTestimonial && (
-          <section className="relative overflow-hidden border-b border-slate-200/80 bg-white py-14 md:py-20">
-            {gridOverlay}
-            <StudioPageContainer className="relative z-10">
-              <PremiumSurface
-                tone="glass"
-                elevation="sm"
-                blur="md"
-                radius="xl"
-                className="mx-auto max-w-3xl overflow-hidden p-8 text-center md:p-10"
-              >
+          <section className="relative overflow-hidden border-b border-(--color-border-default) bg-white py-14 md:py-20">
+            <StudioPageContainer>
+              <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-(--color-border-default) bg-(--neutral-50) p-8 text-center md:p-10">
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(88,41,199,0.06),rgba(255,255,255,0)_60%),radial-gradient(circle_at_100%_100%,rgba(249,169,31,0.06),rgba(255,255,255,0)_60%)]"
+                  className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_0%_0%,rgba(88,41,199,0.04),transparent_60%),radial-gradient(circle_at_100%_100%,rgba(249,169,31,0.05),transparent_60%)]"
                 />
-
                 <div className="relative space-y-6">
                   <div className="flex items-center justify-center gap-3">
-                    <p className="text-label-sm uppercase tracking-[0.22em] text-(--color-text-tertiary)">
+                    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-brand">
                       {content.pageTestimonial.label}
-                    </p>
-                    <Quote
-                      className="size-6 text-(--color-text-tertiary) opacity-30"
-                      strokeWidth={1.5}
-                    />
+                    </span>
+                    <Quote className="size-5 text-brand opacity-30" strokeWidth={1.5} />
                   </div>
-
                   <blockquote className="text-body-lg leading-[1.7] text-(--neutral-800) md:text-body-xl">
                     &ldquo;{content.pageTestimonial.quote}&rdquo;
                   </blockquote>
-
                   <div className="mx-auto h-px w-16 bg-linear-to-r from-transparent via-[rgba(88,41,199,0.3)] to-transparent" />
-
                   <div className="flex flex-col items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -285,20 +248,56 @@ export function UiuxDesignPage({
                     </div>
                   </div>
                 </div>
-              </PremiumSurface>
+              </div>
             </StudioPageContainer>
           </section>
         )}
 
         {/* 07 — CTA */}
-        <StudioCtaCard
-          eyebrow="Got an interface that needs to work harder?"
-          title="We design product experiences from first flow to final component — built to ship, built to scale."
-          primaryCtaLabel="Start a project"
-          primaryCtaHref="/#process"
-          sectionOverlay={gridOverlay}
-          sectionClassName="border-t border-slate-200/80 bg-white py-16 md:py-20"
-        />
+        <section className="px-6 py-16 md:px-10 md:py-20">
+          <StudioPageContainer>
+            <div className="careers-cta-surface relative overflow-hidden rounded-4xl px-6 py-14 text-center sm:px-10 sm:py-20 md:px-16 md:py-28">
+              <div
+                className="careers-cta-glow-primary pointer-events-none absolute -left-32 -top-48 size-150 rounded-full opacity-70"
+                aria-hidden="true"
+              />
+              <div
+                className="careers-cta-glow-accent pointer-events-none absolute -bottom-52 -right-40 size-150 rounded-full opacity-50"
+                aria-hidden="true"
+              />
+              <div className="relative">
+                <span className="mb-6 inline-block font-mono text-[12px] font-medium uppercase tracking-[0.04em] text-brand">
+                  Got an interface that needs to work harder?
+                </span>
+                <h2 className="careers-cta-heading mb-6 text-(--neutral-900)">
+                  Design that starts from{" "}
+                  <em className="font-medium not-italic text-brand">
+                    your user&apos;s first moment
+                  </em>{" "}
+                  and ships as production-ready components.
+                </h2>
+                <p className="mx-auto mb-10 max-w-130 text-base leading-relaxed text-(--neutral-600) md:text-lg">
+                  We design product experiences from first flow to final component — built to ship, built to scale.
+                </p>
+                <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/#process"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-7 py-4 text-[15px] font-semibold text-white shadow-[0_6px_18px_rgba(88,41,199,0.25)] transition-all hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(88,41,199,0.35)] sm:w-auto"
+                  >
+                    Start a project
+                    <ArrowRight size={16} />
+                  </Link>
+                  <a
+                    href="mailto:hello@yuvabestudios.com"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-(--color-border-default) bg-white px-7 py-4 text-[13px] font-semibold text-(--neutral-700) transition-all hover:border-brand/30 hover:text-brand sm:w-auto sm:text-[15px]"
+                  >
+                    hello@yuvabestudios.com
+                  </a>
+                </div>
+              </div>
+            </div>
+          </StudioPageContainer>
+        </section>
       </article>
     </main>
   );

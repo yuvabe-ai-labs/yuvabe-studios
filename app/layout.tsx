@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { ReactQueryProvider } from "@/app/providers";
 import { StartProjectModalProvider } from "@/components/studio/start-project-modal-provider";
+import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { siteMetadataBase } from "@/lib/site";
 import { StudioFooter } from "@/components/studio/studio-footer";
 
@@ -83,10 +84,12 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth">
       <body className="font-sans antialiased">
         <ReactQueryProvider>
-          <StartProjectModalProvider>
-            {children}
-            <StudioFooter />
-          </StartProjectModalProvider>
+          <SmoothScrollProvider>
+            <StartProjectModalProvider>
+              {children}
+              <StudioFooter />
+            </StartProjectModalProvider>
+          </SmoothScrollProvider>
         </ReactQueryProvider>
       </body>
     </html>
