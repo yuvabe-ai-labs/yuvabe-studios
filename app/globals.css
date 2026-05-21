@@ -949,7 +949,7 @@ h6 {
 /* CTA heading — responsive clamp size that can't be expressed as a fixed Tailwind step */
 .careers-cta-heading {
   font-family: var(--font-display-family);
-  font-size: clamp(28px, 6vw, 84px);
+  font-size: clamp(28px, 5vw, 64px);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.03em;

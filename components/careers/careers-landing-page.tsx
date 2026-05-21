@@ -87,9 +87,9 @@ function PrincipleCard({ p }: { p: PrincipleCardProps }) {
   /* ── Full-width hero card ── */
   if (p.span === "full") {
     return (
-      <article className={`${base} flex h-full flex-col gap-10 p-10 md:flex-row md:items-center md:p-14`}>
-        {/* Left: text content */}
-        <div className="flex flex-col md:w-1/2">
+      <article className={`${base} flex h-full flex-col gap-10 p-10 md:p-14`}>
+        {/* Text content */}
+        <div className="flex flex-col md:w-3/5">
           <span className={`mb-6 font-mono text-[11px] font-medium uppercase tracking-[0.04em] ${eyebrowColor[p.tone]}`}>
             {p.eyebrow}
           </span>
@@ -98,8 +98,13 @@ function PrincipleCard({ p }: { p: PrincipleCardProps }) {
           </h3>
           <p className={`max-w-md text-[17px] leading-[1.55] ${bodyColor[p.tone]}`}>{p.body}</p>
         </div>
-        {/* Right: decorative stripe */}
-        <div className="careers-principle-stripe-dark h-48 flex-1 rounded-2xl md:h-full md:min-h-50" aria-hidden="true" />
+        {/* Team image — bottom-right corner on desktop */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/assets/careers/group.png"
+          alt="Yuvabe team"
+          className="h-44 w-full rounded-2xl object-cover md:absolute md:inset-y-0 md:right-0 md:h-full md:w-2/5 md:rounded-none md:rounded-r-3xl md:object-center"
+        />
       </article>
     );
   }
@@ -121,40 +126,6 @@ function PrincipleCard({ p }: { p: PrincipleCardProps }) {
       </h3>
       <p className={`text-sm leading-relaxed ${bodyColor[p.tone]}`}>{p.body}</p>
 
-      {p.meta && (
-        <div className="mt-auto border-t border-(--color-border-default) pt-5">
-          <div className="flex gap-8">
-            {p.meta.map((m: { value: string; label: string }) => (
-              <div key={m.label}>
-                <div className="font-(family-name:--font-display-family) text-[26px] font-semibold leading-none tracking-tight text-(--neutral-900)">
-                  {m.value}
-                </div>
-                <div className="mt-1 text-xs text-(--neutral-500)">{m.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {p.span === "normal" && p.tone === "soft" && (
-        <div className="mt-auto pt-6">
-          <div
-            className="careers-principle-stripe-soft h-28 w-full rounded-xl"
-            aria-hidden="true"
-          />
-        </div>
-      )}
-
-      {p.span === "normal" && p.tone === "accent" && (
-        <div className="mt-auto border-t border-black/10 pt-6">
-          <div className="font-[family-name:var(--font-display-family)] text-[clamp(40px,4vw,56px)] font-semibold leading-none tracking-[-0.03em]">
-            2025
-          </div>
-          <div className="mt-2 text-xs text-(--neutral-700)/75">
-            founded in Auroville, India
-          </div>
-        </div>
-      )}
     </article>
   );
 }
@@ -498,7 +469,7 @@ export function CareersLandingPage({
         </section>
 
         {/* ── 02 Culture / Principles ───────────────────────────────────────── */}
-        <section className="py-24 md:py-32" id="culture">
+        <section className="py-24 md:pb-32 md:pt:-24" id="culture">
           <StudioPageContainer>
             <div className="mb-14">
               <Kicker>— Life at Yuvabe</Kicker>
@@ -718,12 +689,7 @@ export function CareersLandingPage({
                     Apply now
                     <ArrowRight size={16} />
                   </Link>
-                  <a
-                    href="mailto:join@yuvabestudios.com"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-(--color-border-default) bg-white px-7 py-4 text-[13px] font-semibold text-(--neutral-700) transition-all hover:border-(--purple-500)/30 hover:text-brand sm:w-auto sm:text-[15px]"
-                  >
-                    join@yuvabestudios.com
-                  </a>
+                 
                 </div>
               </div>
             </div>
